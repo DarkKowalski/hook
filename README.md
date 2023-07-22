@@ -22,11 +22,11 @@ Detours playground
 ### Setup
 
 ```
-./build.sh setup
+./run.sh setup
 ```
 ### Build
 ```bash
-./build.sh build debug
+./run.sh build debug
 ```
 
 ### Run
