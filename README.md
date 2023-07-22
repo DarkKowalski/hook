@@ -19,6 +19,11 @@ Detours playground
 
 ## Usage
 
+### Setup
+
+```
+./build.sh setup
+```
 ### Build
 ```bash
 ./build.sh build debug
