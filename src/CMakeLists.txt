@@ -1,14 +1,17 @@
-# import detours
+include(TargetExportArtifacts)
+
+# Import libraries
+## detours
 find_path(DETOURS_INCLUDE_DIRS "detours/detours.h")
 find_library(DETOURS_LIBRARY detours REQUIRED)
 
-add_executable(comeasy comeasy.cpp)
+## imgui
+find_package(imgui CONFIG REQUIRED)
 
-add_executable(withdll withdll.cpp)
-target_include_directories(withdll PRIVATE ${DETOURS_INCLUDE_DIRS})
-target_link_libraries(withdll PRIVATE ${DETOURS_LIBRARY})
+## glog
+find_package(glog CONFIG REQUIRED)
 
-add_library(wrotei SHARED wrotei.cpp)
-target_include_directories(wrotei PRIVATE ${DETOURS_INCLUDE_DIRS})
-target_link_libraries(wrotei PRIVATE ${DETOURS_LIBRARY})
-target_link_options(wrotei PRIVATE "/EXPORT:DetourFinishHelperProcess,@1,NONAME") # Export by Ordinal
+add_subdirectory(gadget)
+add_subdirectory(loader)
+add_subdirectory(target)
+add_subdirectory(util)

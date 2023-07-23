@@ -1,0 +1,6 @@
+function(target_export_runtime_artifacts from_target to_path)
+    install(TARGETS ${from_target} RUNTIME DESTINATION "${to_path}")
+    if(WIN32)
+        install(FILES "$<TARGET_RUNTIME_DLLS:${from_target}>" DESTINATION "${to_path}")
+    endif()
+endfunction()

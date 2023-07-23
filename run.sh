@@ -4,8 +4,8 @@ set -euo pipefail
 
 BUILD_DIR="build"
 TEST_DIR="$BUILD_DIR/test"
+INSTALL_DIR="out"
 TOOLCHAIN_FILE="$(echo $VCPKG_ROOT | cygpath -f -)/scripts/buildsystems/vcpkg.cmake"
-
 
 setup() {
     echo "Using vcpkg root: $VCPKG_ROOT"
@@ -23,13 +23,13 @@ build() {
     start=$SECONDS
 
     if [ "$1" == "debug" ]; then
-        cmake -S . -B $BUILD_DIR -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Debug
+        cmake -S . -B $BUILD_DIR -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR/debug"
         cmake --build $BUILD_DIR --config Debug
     elif [ "$1" == "release" ]; then
-        cmake -S . -B $BUILD_DIR -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Release
+        cmake -S . -B $BUILD_DIR -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR/release"
         cmake --build $BUILD_DIR --config Release
     elif [ "$1" == "profile" ]; then
-        cmake -S . -B $BUILD_DIR -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        cmake -S . -B $BUILD_DIR -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR/profile"
         cmake --build $BUILD_DIR --config RelWithDebInfo
     else
         echo "Invalid build type"
@@ -39,6 +39,26 @@ build() {
     echo "Build took $duration seconds"
 
     echo "Finished building - $1"
+}
+
+install() {
+    echo "Installing - $1"
+    start=$SECONDS
+
+    if [ "$1" == "debug" ]; then
+        cmake --install $BUILD_DIR --config Debug
+    elif [ "$1" == "release" ]; then
+        cmake --install $BUILD_DIR --config Release
+    elif [ "$1" == "profile" ]; then
+        cmake --install $BUILD_DIR --config RelWithDebInfo
+    else
+        echo "Invalid build type"
+    fi
+
+    duration=$(( SECONDS - start ))
+    echo "Install took $duration seconds"
+
+    echo "Finished installing - $1"
 }
 
 test() {
@@ -82,9 +102,11 @@ case "$1" in
     build)
         if [ $# -eq 2 ]; then
             build $2
+            install $2
         else
             echo "No build type specified, defaulting to debug"
             build debug
+            install debug
         fi
         ;;
     test)

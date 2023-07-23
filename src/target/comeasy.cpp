@@ -35,6 +35,8 @@
 #include <windows.h>
 #include <stdio.h>
 
+#include <logger.h>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 int __cdecl main(int argc, char **argv)
@@ -48,7 +50,9 @@ int __cdecl main(int argc, char **argv)
     ULARGE_INTEGER ul;
     LARGE_INTEGER li;
 
-    printf("comeasy.exe: Starting (at %p).\n", main);
+    util::InitLogger("comeasy", true);
+
+    LOG(INFO) << "comeasy.exe: Starting (at " << main << ").";
 
     CoInitialize(NULL);
 
@@ -60,20 +64,17 @@ int __cdecl main(int argc, char **argv)
     li.QuadPart = 0;
     hr = pStream->Seek(li, STREAM_SEEK_SET, NULL);
 
-    printf("comeasy.exe: First write.\n");
-    fflush(stdout);
+    LOG(INFO) << "comeasy.exe: First write.";
 
     li.QuadPart = 0;
     hr = pStream->Write(&ul, sizeof(ul), NULL);
 
-    printf("comeasy.exe: Second write.\n");
-    fflush(stdout);
+    LOG(INFO) << "comeasy.exe: Second write.";
 
     li.QuadPart = 1;
     hr = pStream->Write(&li, sizeof(li), NULL);
 
-    printf("comeasy.exe: Third write.\n");
-    fflush(stdout);
+    LOG(INFO) << "comeasy.exe: Third write.";
 
     li.QuadPart = 2;
     hr = pStream->Write(&li, sizeof(li), NULL);
@@ -83,8 +84,9 @@ int __cdecl main(int argc, char **argv)
 
     CoUninitialize();
 
-    printf("comeasy.exe: Exiting.\n\n");
-    fflush(stdout);
+    LOG(INFO) << "comeasy.exe: Exiting.";
+
+    util::ShutdownLogger("comeasy");
 
     return 0;
 }

@@ -31,6 +31,6 @@ Detours playground
 
 ### Run
 ```
-cd build/src/Debug/
+cd out/debug
 ./withdll.exe -d:wrotei.dll comeasy.exe
 ```
