@@ -529,3 +529,4 @@ FodyWeavers.xsd
 
 /build/
 /out/
+!/blob/dx12.exe

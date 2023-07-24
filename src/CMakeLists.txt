@@ -13,5 +13,4 @@ find_package(glog CONFIG REQUIRED)
 
 add_subdirectory(gadget)
 add_subdirectory(loader)
-add_subdirectory(target)
 add_subdirectory(util)

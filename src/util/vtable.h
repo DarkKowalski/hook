@@ -2,8 +2,9 @@
 
 namespace util
 {
-    static inline void *GetVTableFunction(void *vtable, const int index)
+    static inline void *GetVTableFunctionAddress(void *class_ptr, const int index)
     {
-        return reinterpret_cast<void **>(vtable)[index];
+        void **vtable = *reinterpret_cast<void ***>(class_ptr);
+        return vtable[index];
     }
 }
