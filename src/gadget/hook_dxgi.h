@@ -9,6 +9,9 @@
 #include <detours/detours.h>
 #include <util.h>
 
+#include "address_map.h"
+#include "hook_helper.h"
+
 namespace hook
 {
     class HookDXGI
@@ -18,11 +21,8 @@ namespace hook
 
     public:
         static HRESULT __stdcall HookIDXGISwapChain4Present(IDXGISwapChain4 *pThis, UINT SyncInterval, UINT Flags);
-        static bool FindIDXGISwapChain4Present();
-        static bool InstallIDXGISwapChain4Present();
 
     public:
-        static bool Setup();
         static bool Install();
         static void Uninstall();
 

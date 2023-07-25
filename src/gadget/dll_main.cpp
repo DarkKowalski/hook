@@ -23,17 +23,7 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID reserved)
 
         util::InitLogger("gadget", true);
 
-        // New Thread for Detouring
-        // const auto detour_thread = CreateThread(
-        //     nullptr,
-        //     0,
-        //     reinterpret_cast<LPTHREAD_START_ROUTINE>(hook::Setup),
-        //     nullptr,
-        //     0,
-        //     nullptr);
-        // SetThreadDescription(detour_thread, L"SetupThread");
-
-        hook::Setup();
+        hook::Install();
 
         LOG(INFO) << "gadget.dll: Starting.";
     }
